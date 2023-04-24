@@ -69,7 +69,7 @@ foreach ($feat in $feats_blocked) {
 }
 
 # Tweak registry.
-. (Join-Path $PSScriptRoot .\Registery.ps1)
+. (Join-Path $PSScriptRoot .\Registry.ps1)
 
 # Commit image and unmount.
 Dismount-WindowsImage -Path $wim_mount_dir -Save -CheckIntegrity
