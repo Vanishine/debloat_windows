@@ -1,5 +1,9 @@
-# Mount the ISO file to get `install.wim`.
+# These files and a folder will be used or created.
 $iso_file_path = (Get-ChildItem 'C:\*windows_10*.iso').FullName
+$new_wim_path = 'C:\Windows_10_22H2.wim'
+$wim_mount_dir = 'C:\mount'
+
+# Mount the ISO file to get `install.wim`.
 $iso = Mount-DiskImage $iso_file_path
 $iso_driver_letter = (Get-Volume -DiskImage $iso).DriveLetter
 $wim_file_path = "$iso_driver_letter`:\sources\install.wim"
@@ -9,12 +13,10 @@ Get-WindowsImage -ImagePath $wim_file_path
 $wim_image_index = 3
 
 # Extract what you selected to a new `.wim` file.
-$new_wim_path = 'C:\Windows_10_22H2.wim'
 Export-WindowsImage -SourceImagePath $wim_file_path -SourceIndex $wim_image_index -DestinationImagePath $new_wim_path
 Dismount-DiskImage -ImagePath $iso.ImagePath
 
 # Now mount the new image file.
-$wim_mount_dir = 'C:\mount'
 mkdir $wim_mount_dir
 Mount-WindowsImage -ImagePath $new_wim_path -Index 1 -Path $wim_mount_dir
 
@@ -65,6 +67,9 @@ MicrosoftWindowsPowerShellV2
 foreach ($feat in $feats_blocked) {
   Disable-WindowsOptionalFeature -Path $wim_mount_dir -FeatureName $feat -Remove
 }
+
+# Tweak registry.
+. (Join-Path $PSScriptRoot .\Registery.ps1)
 
 # Commit image and unmount.
 Dismount-WindowsImage -Path $wim_mount_dir -Save -CheckIntegrity
