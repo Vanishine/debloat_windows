@@ -1,25 +1,27 @@
 # ✂️ Debloat Windows
 
-精简最新版本的 Windows 系统。
+[简体中文](./README.zh-Hans.md)
 
-## 原则
+Debloat the latest version of Windows.
 
-不使用除了微软提供的任何其他第三方的闭源软件。主要目标不是为了减少磁盘空间占用（如安装镜像大小和安装后系统大小），而是为了删除不必要的功能（主要是广告）以及提高系统性能和减少隐私泄露。
+## Principles
 
-只保证对最新的 Windows 11 和 Windows 10 的 MSDN 镜像可用，其他版本或许可用但不在支持的范围内。
+Do not use any third-party closed-source software other than that provided by Microsoft. The main goal is not to reduce disk space usage (e.g., installation image size and post-installation system size), but to remove unnecessary features (mainly ads) as well as to improve system performance and reduce privacy leaks.
 
-## 精简步骤
+Only the latest MSDN images for Windows 11 and Windows 10 are guaranteed to be supported, other versions may be available but are not supported.
 
-> 🛑 第一次使用该脚本，请在基本理解命令后一小段一小段地复制到 PowerShell 中执行，否则可能会因为存在缺陷造成误删文件或其他意料之外的行为。在对脚本脚本的执行流程基本清楚后可用来自动化执行，倒上一杯咖啡，等待系统精简完成。
+## Steps
 
-使用管理员身份启动 PowerShell 后，见 [Optimize.ps1](Optimize.ps1)。
+> 🛑 The first time you use this PowerShell script, please copy commands from it in small pieces after you have a basic understanding of the commands, otherwise it may be flawed and cause accidental file deletion or other unintended behavior. Once you know the script execution process well, you can automate the execution, grab a cup of coffee and wait for the image to finish debloating.
 
-## 提示
+After starting PowerShell as Administrator, see [Optimize.ps1](Optimize.ps1).
 
-### 使用内存盘
+## Tips
 
-可以使用 ImDisk 来加快构建速度，保证至少 8GB 的空间就已经足够。由于 ImDisk 没有提供磁盘的一些元数据，因此只能在其内部创建一个 VHDX 来挂载 Windows 镜像。
+### Using a ram disk
 
-## 问题
+You can use [ImDisk](https://sourceforge.net/projects/imdisk-toolkit/) to speed up the build, at least 8GB of space is sufficient. Since ImDisk does not provide some metadata for the disk, you can only create a VHDX inside it to mount the Windows image.
 
-如何实现 [可重现的构建](https://reproducible-builds.org/)？
+## Questions
+
+How to implement a [reproducible build](https://reproducible-builds.org/)?
