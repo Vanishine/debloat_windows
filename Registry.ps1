@@ -364,7 +364,36 @@ REG ADD "$reg_user\Software\Policies\Microsoft\Windows\Explorer" /v "NoWindowMin
 # @REM 允许在线提示
 REG ADD "$reg_software\Microsoft\Windows\CurrentVersion\Policies\Explorer" /v "AllowOnlineTips" /t REG_DWORD /d "0" /f
 
-####
+<#
+  These tweaks base on the result of analysis tools.
+#>
+
+# @REM Defender 右键菜单
+REG DELETE "$reg_software\Classes\*\shellex\ContextMenuHandlers\EPP" /f
+REG DELETE "$reg_software\Classes\Drive\shellex\ContextMenuHandlers\EPP" /f
+REG DELETE "$reg_software\Classes\Directory\shellex\ContextMenuHandlers\EPP" /f
+
+# @REM Windows 10 分享右键菜单
+REG DELETE "$reg_software\Classes\*\shellex\ContextMenuHandlers\ModernSharing" /f
+
+# @REM Defender 托盘菜单启动项
+REG DELETE "$reg_software\Microsoft\Windows\CurrentVersion\Run" /v SecurityHealth /f
+
+# Edge
+REG DELETE "$reg_software\Microsoft\Active Setup\Installed Components\{9459C573-B17A-45AE-9F64-1857B5D58CEE}" /f
+
+# OneDrive
+REG DELETE "$reg_user\SOFTWARE\Microsoft\Windows\CurrentVersion\Run" /v OneDriveSetup /f
+
+# 安全和维护
+REG DELETE "$reg_software\Microsoft\Windows\CurrentVersion\Explorer\ShellServiceObjects\{F56F6FDD-AA9D-4618-A949-C1B91AF43B1A}" /f
+REG DELETE "$reg_software\WOW6432Node\Microsoft\Windows\CurrentVersion\Explorer\ShellServiceObjects\{F56F6FDD-AA9D-4618-A949-C1B91AF43B1A}" /f
+
+# Disable services.
+. (Join-Path $PSScriptRoot .\Services.ps1)
+
+# Delete scheduled tasks.
+. (Join-Path $PSScriptRoot .\ScheduledTasks.ps1)
 
 REG UNLOAD $reg_software
 REG UNLOAD $reg_system

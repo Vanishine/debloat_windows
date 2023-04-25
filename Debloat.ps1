@@ -1,7 +1,4 @@
-# These files and a folder will be used or created.
-$iso_file_path = (Get-ChildItem 'C:\*windows_10*.iso').FullName
-$new_wim_path = 'C:\Windows_10_22H2.wim'
-$wim_mount_dir = 'C:\mount'
+. (Join-Path $PSScriptRoot .\Config.ps1)
 
 # Mount the ISO file to get `install.wim`.
 $iso = Mount-DiskImage $iso_file_path
@@ -27,10 +24,8 @@ Microsoft.DesktopAppInstaller
 Microsoft.StorePurchaseApp
 Microsoft.VCLibs.140.00
 Microsoft.WindowsStore
-Microsoft.Xbox.TCUI
-Microsoft.XboxApp
 Microsoft.XboxIdentityProvider
-'@.Trim() -split "`n"
+'@ -split '\r?\n'
 
 foreach ($pkg in $pkgs) {
   if ($pkg.DisplayName -in $pkgs_allowed) { continue }
@@ -62,7 +57,7 @@ Printing-Foundation-Features
 Printing-Foundation-InternetPrinting-Client
 MicrosoftWindowsPowerShellV2Root
 MicrosoftWindowsPowerShellV2
-'@.Trim() -split "`n"
+'@ -split '\r?\n'
 
 foreach ($feat in $feats_blocked) {
   Disable-WindowsOptionalFeature -Path $wim_mount_dir -FeatureName $feat -Remove
@@ -71,5 +66,9 @@ foreach ($feat in $feats_blocked) {
 # Tweak registry.
 . (Join-Path $PSScriptRoot .\Registry.ps1)
 
+. (Join-Path $PSScriptRoot .\Cleanup.ps1)
+
 # Commit image and unmount.
 Dismount-WindowsImage -Path $wim_mount_dir -Save -CheckIntegrity
+
+. (Join-Path $PSScriptRoot .\Post.ps1)
